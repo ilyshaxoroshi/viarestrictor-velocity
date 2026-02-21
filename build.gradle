@@ -2,25 +2,42 @@ plugins {
     id 'java'
 }
 
+group = 'dev.viarestrictor'
+version = '1.1.0'
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-        vendor = JvmVendorSpec.ADOPTIUM
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
-group = 'fr.akanoka'
-version = '1.0.0'
-description = 'Plugin VersionRestrictor amélioré'
-
 repositories {
     mavenCentral()
-    maven { url = 'https://repo.viaversion.com' }
-    // Nouveau dépôt officiel PaperMC
-    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+
+    // Velocity artifacts (velocity-api) are hosted on PaperMC's public Maven.
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
+
+    // ViaVersion API is published in the "everything" repository.
+    maven { url = "https://repo.viaversion.com/everything/" }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
-    compileOnly 'com.viaversion:viaversion-api:4.9.2'
+    def velocityApiVersion = "3.1.1"
+    def viaVersionApiVersion = "4.9.3"
+
+    compileOnly("com.velocitypowered:velocity-api:$velocityApiVersion")
+    annotationProcessor("com.velocitypowered:velocity-api:$velocityApiVersion")
+
+    compileOnly("com.viaversion:viaversion-api:$viaVersionApiVersion")
+
+    implementation("org.yaml:snakeyaml:1.33")
+}
+
+jar {
+    // Bundle runtime deps (SnakeYAML) into the plugin jar for Velocity runtime.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
