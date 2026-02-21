@@ -1,172 +1,35 @@
-# ViaRestrictor
+# ViaRestrictor for Velocity
+This is ViaRestrictor, a fork of the original akanoka/viarestrictor project, adapted specifically for Velocity proxies. It helps manage client versions on your Minecraft proxy setup by integrating with ViaVersion, allowing you to restrict access from incompatible or undesired clients and provide informative messages if needed.
 
-**Block certain Minecraft versions (via ViaVersion) and display a custom message to the player.**
+### What It Does
 
----
+Detects the player's client version through ViaVersion (which must be installed).
+Supports blacklisting restricted versions or whitelisting allowed ones, based on your preference.
+Customizable kick messages with color codes (&) and line breaks (\n).
+Option to automatically kick players after displaying the message.
+Logs blocked connections to the console for reference, if enabled.
 
-## Table of Contents
+### Why This Fork?
 
-* [Overview](#overview)
-* [Features](#features)
-* [Prerequisites](#prerequisites)
-* [Installation](#installation)
-* [Configuration](#configuration)
-* [Usage](#usage)
-* [Development & Build](#development--build)
-* [Contributing](#contributing)
-* [License](#license)
-* [Credits](#credits)
+The original plugin was designed for Spigot servers (or forks like Paper). This version has been fully ported to work with Velocity proxies, keeping all the core features intact but optimized for the proxy environment.
+Setup
 
----
+Place the plugin in your Velocity plugins directory.
+Requires Java 17 or higher and ViaVersion.
+The configuration file is generated at plugins/ViaRestrictor/config.yml upon first launch.
+allowed_versions: Specify protocol numbers (e.g., 759 for Minecraft 1.20.1).
 
-## Overview
-
-ViaRestrictor is a Java plugin for Minecraft servers (Spigot/Paper) that relies on **ViaVersion** to detect a player's client version and, depending on the configuration, prevent connection and/or display a custom message.
-
-It is useful for:
-
-* Enforcing a range of allowed versions.
-* Blocking versions known to cause problems or be used by unwanted clients.
-
----
-
-## Features
-
-* Define a list of **forbidden** versions or an **allowed** list.
-* Customizable message sent to the player attempting to connect with an unauthorized version (supports Minecraft color codes `&`).
-* Option to automatically `kick` the player.
-* Integration that detects the presence of ViaVersion on startup.
-
----
-
-## Prerequisites
-
-* Java 17+ (or the recommended version for your server)
-* Compatible Spigot/Paper server
-* ViaVersion installed (required to correctly detect client versions)
-
----
-
-## Installation
-
-1. Download the JAR (`ViaRestrictor.jar`) from the GitHub releases or compile from source.
-2. Place `ViaRestrictor.jar` in your server's `plugins/` folder.
-3. Restart the server. The plugin will automatically create `plugins/ViaRestrictor/config.yml`.
-
----
-
-## Configuration
-
-A `config.yml` file is generated on the first startup. Here is a usable example:
-
-```yaml
-# ViaRestrictor configuration
-# ========================================
-# VersionRestrictor - Configuration
-# ========================================
-
-# List of allowed protocol numbers
-# (These numbers correspond to Minecraft versions)
-# See https://wiki.vg/Protocol_version_numbers for the complete reference
-# Examples:
-# 758: 1.20.0
-# 759: 1.20.1
-# 760: 1.20.2
-# 761: 1.20.3
-# 765: 1.20.4
-# 764: 1.21.1
-# 767: 1.21.4
-allowed_versions:
-- 759   # 1.20.1
-- 765   # 1.20.4
-- 764   # 1.21.1
-- 767   # 1.21.4
-
-# Message displayed to players whose version is not allowed
-kick_message: | 
-&cSorry, your Minecraft version is not allowed on this server. 
-&7Detected version: &e%mcversion% (&f%version%&7)
-&aCompatible versions:
-&21.20.x &7and &21.21.4
-
-# Log kicks to the console
-log_kicks: true
-```
-
-**Important fields:**
-
-* `mode`: `whitelist` (only listed versions are allowed).
-* `versions`: array of strings representing client versions.
-* `message`: message sent to the player (supports `\n` for line breaks and color codes `&`).
-* `kick`: if `true`, the player is kicked after the message is displayed.
-* `log-blocked`: if `true`, blocked attempts are logged to the console.
-
----
-
-## Usage
-
-* Modify `config.yml` according to your needs. * Restart the server or reload the configuration (if you implement a `/vr reload` command).
-* Test the connection with different versions to verify the behavior.
-
-### Commands (suggestions)
-
-> The plugin does not necessarily include these commands by default — this is an API suggestion to implement.
 
 ```
-/vr reload   # reloads the configuration
+kick_message: Customize with placeholders like %mcversion% or %version%.
+
+mode: Use whitelist to allow only specified versions.
+
+kick: Set to true to enable automatic kicks.
+
+log_kicks: Set to true to log blocked players in the console.
 ```
 
----
+Example for kick:  ![kick](<img width="1058" height="293" alt="286ad13cb50cc24033281b2d4bd9fe695335777a" src="https://github.com/user-attachments/assets/896aea06-b9c2-440b-9405-2805db30fb3a" />
 
-## Development & Build
-
-### Recommended Structure
-
-```
-src/main/java/akanoka/viarestrictor/
-- ViaRestrictor.java (main class extends JavaPlugin)
-resources/
-- plugin.yml
-- config.yml (example)
-```
-
-### Build (Maven)
-
-Example of a minimal `pom.xml`:
-
-```xml
-<!-- add Spigot/Paper and ViaVersion dependencies if needed -->
-```
-
-To compile:
-
-```bash
-mvn clean package
-```
-
----
-
-## Contributing
-
-Contributions are welcome — issues, suggestions, and pull requests. Please follow these rules:
-
-1. Fork and create a branch for each feature or bug.
-2. Tests and compatibility with ViaVersion are appreciated.
-3. Document any major changes in the README.
-
----
-
-## License
-
-This project is licensed under the **Apache License 2.0**. See the `LICENSE` file for the full text.
-
----
-
-## Credits
-
-* Maintained by AkaNoka
-* Inspired by the needs of Paper/Spigot servers to maintain consistent client versions
-
----
-
-*Last updated: October 31, 2025*
+You can reload the configuration using Velocity's commands (like /velocity reload) or restart 
