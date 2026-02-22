@@ -30,6 +30,7 @@ kick: Set to true to enable automatic kicks.
 log_kicks: Set to true to log blocked players in the console.
 ```
 
-Example for kick:  ![kick](<img width="1058" height="293" alt="286ad13cb50cc24033281b2d4bd9fe695335777a" src="https://github.com/user-attachments/assets/896aea06-b9c2-440b-9405-2805db30fb3a" />
+Example for kick: <img width="1058" height="293" alt="286ad13cb50cc24033281b2d4bd9fe695335777a" src="https://github.com/user-attachments/assets/7187dcfb-4b34-432f-8da4-937873596c16" />
+
 
 You can reload the configuration using Velocity's commands (like /velocity reload) or restart 
